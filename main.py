@@ -1,23 +1,15 @@
 import os
 import sys
-import json
 from pathlib import Path
 from pdf2image import convert_from_path
 
 
 class PDF2ImageConverter:
     def __init__(self):
-        json_load = self.read_json()
-        self.poppler_path = Path(json_load['poppler_path'])
-        self.img_format = json_load['img_format']
+        self.poppler_path = "./poppler/Library/bin"
+        self.img_format = "JPEG"
         self.img_extension = self.search_img_format()
         self.poppler_setting()  # popplerの設定
-
-    @staticmethod
-    def read_json():
-        json_open = open('./settings.json', 'r')
-        json_load = json.load(json_open)
-        return json_load
 
     def poppler_setting(self):
         poppler_dir = Path(__file__).parent.absolute() / self.poppler_path
