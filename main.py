@@ -31,30 +31,41 @@ class PDF2ImageConverter:
 
         pages = convert_from_path(pdf_path)
         if len(pages) > 1:  # ページが複数ある場合
-            for i, page in enumerate(pages):
-                file_name = pdf_path.stem + '_{:02d}'.format(i + 1) + self.img_extension
-                image_path = image_dir / file_name
-                page.save(str(image_path), self.img_format)
+            try:
+                for i, page in enumerate(pages):
+                    file_name = pdf_path.stem + '_{:02d}'.format(i + 1) + self.img_extension
+                    image_path = image_dir / file_name
+                    page.save(str(image_path), self.img_format)
+            except Exception as e:
+                print(f"エラーが発生しました: {e}")
         else:
-            file_name = pdf_path.stem + self.img_extension
-            image_path = image_dir / file_name
-            pages[0].save(str(image_path), self.img_format)
+            try:
+                file_name = pdf_path.stem + self.img_extension
+                image_path = image_dir / file_name
+                pages[0].save(str(image_path), self.img_format)
+            except Exception as e:
+                print(f"エラーが発生しました: {e}")
 
 
 def main():
-    # Pathの取得
-    if len(sys.argv) != 2:
-        input_path = Path(input('PDFファイルPath on フォルダバス：').replace('"', ''))
-    else:
-        input_path = Path(sys.argv[1])
+    try:
+        # Pathの取得
+        if len(sys.argv) != 2:
+            input_path = Path(input('PDFファイルPath on フォルダバス：').replace('"', ''))
+        else:
+            input_path = Path(sys.argv[1])
+    
+        pdf2image = PDF2ImageConverter()
+        if input_path.is_dir():  # フォルダだった場合
+            pdf_files = list(input_path.glob('*.pdf'))
+            for pdf_file in pdf_files:
+                pdf2image.convert_pdf_to_images(pdf_file, input_path)
+        else:  # PDFファイルだった場合
+            pdf2image.convert_pdf_to_images(input_path, input_path.parent)
+    except Exception as e:
+        print(f"エラーが発生しました: {e}")
 
-    pdf2image = PDF2ImageConverter()
-    if input_path.is_dir():  # フォルダだった場合
-        pdf_files = list(input_path.glob('*.pdf'))
-        for pdf_file in pdf_files:
-            pdf2image.convert_pdf_to_images(pdf_file, input_path)
-    else:  # PDFファイルだった場合
-        pdf2image.convert_pdf_to_images(input_path, input_path.parent)
+    input("終了するにはエンターキーを押してください...")
 
 
 if __name__ == '__main__':
