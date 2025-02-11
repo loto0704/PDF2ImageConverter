@@ -22,8 +22,17 @@ jobs:
           unzip poppler.zip -d poppler
           $env:PATH = "$PWD\poppler\Library\bin;$env:PATH"
 
+      - name: Debug PATH
+        run: echo $env:PATH
+
+      - name: Check Poppler Files
+        run: dir ./poppler/Library/bin
+
+      - name: Verify Poppler Directly
+        run: ./poppler/Library/bin/pdftocairo.exe -v
+
       - name: Verify Poppler
-        run: pdftocairo.exe -v
+        run: ./poppler/Library/bin/pdftocairo.exe -v
 
       - name: Install Python and PyInstaller
         uses: actions/setup-python@v2
