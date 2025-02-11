@@ -23,7 +23,7 @@ jobs:
           $env:PATH = "$PWD\poppler\Library\bin;$env:PATH"
 
       - name: Verify Poppler
-        run: pdftocairo -v
+        run: pdftocairo.exe -v
 
       - name: Install Python and PyInstaller
         uses: actions/setup-python@v2
