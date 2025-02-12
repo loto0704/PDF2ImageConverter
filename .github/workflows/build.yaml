@@ -17,12 +17,16 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Download Poppler
+        env:
+          POPPLER_VERSION: "24.08.0"
+        shell: bash -l {0}
         run: |
-          curl -L -o poppler.zip https://github.com/oschwartz10612/poppler-windows/releases/download/v24.08.0-0/Release-24.08.0-0.zip
+          curl -L -o poppler.zip https://github.com/oschwartz10612/poppler-windows/releases/download/v${POPPLER_VERSION}-0/Release-v${POPPLER_VERSION}-0.zip
           unzip poppler.zip -d poppler
 
       - name: Verify Poppler
-        run: .\poppler\Library\bin\pdftocairo -v
+        shell: bash -l {0}
+        run: .\poppler\poppler-24.08.0\Library\bin\pdftocairo -v
 
       - name: Install Python and PyInstaller
         uses: actions/setup-python@v2
@@ -42,12 +46,11 @@ jobs:
         run: |
           VERSION=$(cat version.txt)
           ZIP_FILE="dist/pdf2imageconverter-ver${VERSION}.zip"
-          echo "::set-output name=zip_name::${ZIP_FILE}"
-        id: set-output
+          echo "zip_name=${ZIP_FILE}" >> $GITHUB_ENV
 
       - name: Upload Artifacts
         uses: actions/upload-artifact@v4
         with:
           name: dynamic-exe-zip
-          path: ${{ steps.set-output.outputs.zip_name }}
+          path: ${{ env.zip_name }}
 
