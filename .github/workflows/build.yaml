@@ -21,7 +21,7 @@ jobs:
           POPPLER_VERSION: "24.08.0"
         shell: bash -l {0}
         run: |
-          curl -L -o poppler.zip https://github.com/oschwartz10612/poppler-windows/releases/download/v${{env.POPPLER_VERSION}}-0/Release-v${{env.POPPLER_VERSION}}-0.zip
+          curl -L -o poppler.zip https://github.com/oschwartz10612/poppler-windows/releases/download/v${{env.POPPLER_VERSION}}-0/Release-${{env.POPPLER_VERSION}}-0.zip
           unzip poppler.zip -d poppler
 
       - name: Verify Poppler
