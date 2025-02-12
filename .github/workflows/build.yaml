@@ -26,7 +26,7 @@ jobs:
 
       - name: Verify Poppler
         shell: bash -l {0}
-        run: .\poppler\poppler-24.08.0\Library\bin\pdftocairo -v
+        run: ./poppler/poppler-${{env.POPPLER_VERSION}}/Library/bin/pdftocairo -v
 
       - name: Install Python and PyInstaller
         uses: actions/setup-python@v2
