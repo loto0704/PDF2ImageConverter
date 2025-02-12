@@ -22,7 +22,7 @@ jobs:
           unzip poppler.zip -d poppler
 
       - name: Verify Poppler
-        run: .\poppler\Library\bin\pdftocairo - -v
+        run: .\poppler\Library\bin\pdftocairo -v
 
       - name: Install Python and PyInstaller
         uses: actions/setup-python@v2
