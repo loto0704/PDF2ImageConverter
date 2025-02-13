@@ -20,10 +20,14 @@ jobs:
 
       - name: Read version from version.txt
         id: get_version
+        shell: bash
         run: |
-          VERSION=$(cat version.txt)
+          if [ -f version.txt ]; then
+            VERSION=$(cat version.txt)
+          else
+            VERSION=$(Get-Content version.txt)
+          fi
           echo "TOOL_VERSION=${VERSION}" >> $GITHUB_ENV
-          echo "Read TOOL_VERSION=${VERSION}"
 
 
       - name: Download Poppler
