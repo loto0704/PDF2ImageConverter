@@ -13,11 +13,18 @@ jobs:
     runs-on: windows-latest
     env: # ジョブ全体の環境変数を定義
       POPPLER_VERSION: "24.08.0"
-      TOOL_VERSION: VERSION=$(cat version.txt)
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
+
+      - name: Read version from version.txt
+        id: get_version
+        run: |
+          VERSION=$(cat version.txt)
+          echo "TOOL_VERSION=${VERSION}" >> $GITHUB_ENV
+          echo "Read TOOL_VERSION=${VERSION}"
+
 
       - name: Download Poppler
         shell: bash -l {0}
