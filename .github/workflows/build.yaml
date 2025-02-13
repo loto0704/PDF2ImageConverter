@@ -22,13 +22,8 @@ jobs:
         id: get_version
         shell: bash
         run: |
-          if [ -f version.txt ]; then
-            VERSION=$(cat version.txt)
-          else
-            VERSION=$(Get-Content version.txt)
-          fi
+          VERSION=$(cat version.txt)
           echo "TOOL_VERSION=${VERSION}" >> $GITHUB_ENV
-
 
       - name: Download Poppler
         shell: bash -l {0}
