@@ -23,8 +23,8 @@ jobs:
         run: |
           curl -L -o poppler.zip https://github.com/oschwartz10612/poppler-windows/releases/download/v${{env.POPPLER_VERSION}}-0/Release-${{env.POPPLER_VERSION}}-0.zip
           unzip poppler.zip -d poppler-mv
-          mkdir poppler
-          mv "./poppler-mv/poppler-${{env.POPPLER_VERSION}}/Library/" "./poppler/Library/bin"
+          mkdir "poppler"
+          mv "./poppler-mv/poppler-${{env.POPPLER_VERSION}}/Library/" "./poppler/Library/"
           rm -rf "./poppler-mv"
 
       - name: Verify Poppler
