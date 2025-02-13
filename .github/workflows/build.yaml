@@ -46,6 +46,7 @@ jobs:
 
       # DIST 配下の ZIP 生成物を動的アップロード
       - name: Find and Upload ZIP
+        shell: bash
         run: |
           VERSION=$(cat version.txt)
           ZIP_FILE="dist/pdf2imageconverter-ver${VERSION}.zip"
