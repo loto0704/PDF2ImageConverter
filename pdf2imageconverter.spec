@@ -1,6 +1,7 @@
 # -*- mode: python ; coding: utf-8 -*-
 import os
 import shutil
+import zipfile
 
 
 # バージョン情報取得
