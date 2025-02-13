@@ -13,6 +13,7 @@ jobs:
     runs-on: windows-latest
     env: # ジョブ全体の環境変数を定義
       POPPLER_VERSION: "24.08.0"
+      TOOL_VERSION: VERSION=$(cat version.txt)
 
     steps:
       - name: Checkout code
@@ -36,6 +37,12 @@ jobs:
         with:
           python-version: '${{ inputs.python-version }}'
 
+      - name: Create new Git tag
+        shell: bash
+        run: |
+          git tag v${{ env.TOOL_VERSION }}
+          git push origin v${{ env.TOOL_VERSION }}
+
       - run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
@@ -44,12 +51,26 @@ jobs:
       - name: Build EXE
         run: pyinstaller pdf2imageconverter.spec
 
+      - name: Create GitHub Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: v${{ env.TOOL_VERSION }}
+          release_name: PDF2ImageConverter v${{ env.TOOL_VERSION }}
+          body: |
+            ### RELEASE ${{ env.TOOL_VERSION }}
+            - Version: v${{ env.TOOL_VERSION }}
+          draft: false
+          prerelease: false
+
+
       # DIST 配下の ZIP 生成物を動的アップロード
       - name: Find and Upload ZIP
         shell: bash
         run: |
-          VERSION=$(cat version.txt)
-          ZIP_FILE="dist/pdf2imageconverter-ver${VERSION}.zip"
+          ZIP_FILE="dist/pdf2imageconverter-verv${{ env.TOOL_VERSION }}.zip"
           echo "zip_name=${ZIP_FILE}" >> $GITHUB_ENV
 
       - name: Upload Artifacts
