@@ -18,20 +18,36 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
+      - name: Read version from version.txt
+        id: get_version
+        shell: bash
+        run: |
+          VERSION=$(cat version.txt)
+          echo "TOOL_VERSION=${VERSION}" >> $GITHUB_ENV
+
       - name: Download Poppler
         shell: bash -l {0}
         run: |
           curl -L -o poppler.zip https://github.com/oschwartz10612/poppler-windows/releases/download/v${{env.POPPLER_VERSION}}-0/Release-${{env.POPPLER_VERSION}}-0.zip
-          unzip poppler.zip -d poppler
+          unzip poppler.zip -d poppler-mv
+          mkdir "poppler"
+          mv "./poppler-mv/poppler-${{env.POPPLER_VERSION}}/Library/" "./poppler/Library/"
+          rm -rf "./poppler-mv"
 
       - name: Verify Poppler
         shell: bash -l {0}
-        run: ./poppler/poppler-${{env.POPPLER_VERSION}}/Library/bin/pdftocairo -v
+        run: ./poppler/Library/bin/pdftocairo -v
 
       - name: Install Python and PyInstaller
         uses: actions/setup-python@v2
         with:
           python-version: '${{ inputs.python-version }}'
+
+      - name: Create new Git tag
+        shell: bash
+        run: |
+          git tag v${{ env.TOOL_VERSION }}
+          git push origin v${{ env.TOOL_VERSION }}
 
       - run: |
           python -m pip install --upgrade pip
@@ -41,11 +57,26 @@ jobs:
       - name: Build EXE
         run: pyinstaller pdf2imageconverter.spec
 
+      - name: Create GitHub Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: v${{ env.TOOL_VERSION }}
+          release_name: PDF2ImageConverter v${{ env.TOOL_VERSION }}
+          body: |
+            ### RELEASE ${{ env.TOOL_VERSION }}
+            - Version: v${{ env.TOOL_VERSION }}
+          draft: false
+          prerelease: false
+
+
       # DIST 配下の ZIP 生成物を動的アップロード
       - name: Find and Upload ZIP
+        shell: bash
         run: |
-          VERSION=$(cat version.txt)
-          ZIP_FILE="dist/pdf2imageconverter-ver${VERSION}.zip"
+          ZIP_FILE="dist/pdf2imageconverter-verv${{ env.TOOL_VERSION }}.zip"
           echo "zip_name=${ZIP_FILE}" >> $GITHUB_ENV
 
       - name: Upload Artifacts
