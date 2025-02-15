@@ -1,7 +1,6 @@
 # -*- mode: python ; coding: utf-8 -*-
 import os
 import shutil
-import zipfile
 
 
 # バージョン情報取得
@@ -33,7 +32,7 @@ exe = EXE(
     pyz,
     a.scripts,
     [],
-    exclude_binaries=True,
+    exclude_binaries=False,
     name='pdf2imageconverter',
     debug=False,
     bootloader_ignore_signals=False,

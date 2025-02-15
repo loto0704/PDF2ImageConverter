@@ -59,7 +59,7 @@ jobs:
 
       - name: Create GitHub Release
         id: create_release
-        uses: actions/create-release@v1
+        uses: actions/create-release@v3
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
@@ -76,7 +76,7 @@ jobs:
       - name: Find and Upload ZIP
         shell: bash
         run: |
-          ZIP_FILE="dist/pdf2imageconverter-verv${{ env.TOOL_VERSION }}.zip"
+          ZIP_FILE="dist/pdf2imageconverter-ver${{ env.TOOL_VERSION }}.zip"
           echo "zip_name=${ZIP_FILE}" >> $GITHUB_ENV
 
       - name: Upload Artifacts
