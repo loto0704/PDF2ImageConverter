@@ -52,8 +52,3 @@ coll = COLLECT(
     upx_exclude=[],
     name=tool_name,
 )
-
-# ZIP ファイルの作成
-output_zip_file = os.path.join('dist', tool_name + '.zip')
-shutil.make_archive(output_zip_file.replace('.zip', ''), 'zip', 'dist', tool_name)
-

@@ -71,6 +71,8 @@ jobs:
           draft: false
           prerelease: false
 
+      - name: Create ZIP File
+        run: zip -r "pdf2imageconverter-ver${{ env.TOOL_VERSION }}.zip" "dist/pdf2imageconverter-ver${{ env.TOOL_VERSION }}"
 
       # DIST 配下の ZIP 生成物を動的アップロード
       - name: Find and Upload ZIP
@@ -80,8 +82,12 @@ jobs:
           echo "zip_name=${ZIP_FILE}" >> $GITHUB_ENV
 
       - name: Upload Artifacts
-        uses: actions/upload-artifact@v4
+        id: upload-release-asset
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          name: dynamic-exe-zip
-          path: ${{ env.zip_name }}
-
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ${{ env.zip_name }}
+          asset_name: pdf2imageconverter-ver${{ env.TOOL_VERSION }}.zip
+          asset_content_type: application/zip
