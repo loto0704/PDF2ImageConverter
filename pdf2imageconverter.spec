@@ -32,7 +32,7 @@ exe = EXE(
     pyz,
     a.scripts,
     [],
-    exclude_binaries=False,
+    exclude_binaries=True,
     name='pdf2imageconverter',
     debug=False,
     bootloader_ignore_signals=False,
