@@ -72,6 +72,7 @@ jobs:
           prerelease: false
 
       - name: Create ZIP File
+        shell: bash
         run: zip -r "pdf2imageconverter-ver${{ env.TOOL_VERSION }}.zip" "dist/pdf2imageconverter-ver${{ env.TOOL_VERSION }}"
 
       # DIST 配下の ZIP 生成物を動的アップロード
