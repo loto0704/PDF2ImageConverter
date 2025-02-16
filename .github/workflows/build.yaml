@@ -77,6 +77,7 @@ jobs:
           type: 'zip'
           filename: pdf2imageconverter-ver${{ env.TOOL_VERSION }}.zip
           directory: dist
+          path: 'dist/pdf2imageconverter-ver${{ env.TOOL_VERSION }}'
 
       # DIST 配下の ZIP 生成物を動的アップロード
       - name: Find and Upload ZIP
